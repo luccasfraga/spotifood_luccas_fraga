@@ -8,6 +8,7 @@ axiosInstance.interceptors.request.use(
     const customConfig = config;
 
     const token = getToken();
+
     if (token) {
       customConfig.headers.Authorization = `Bearer ${token}`;
     }
@@ -15,7 +16,6 @@ axiosInstance.interceptors.request.use(
     if (!config.headers['Content-Type']) {
       customConfig.headers['Content-Type'] = 'application/json';
     }
-
     return customConfig;
   },
   error => Promise.reject(error),
