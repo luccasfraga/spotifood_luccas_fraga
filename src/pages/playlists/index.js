@@ -69,6 +69,7 @@ class Playlists extends Component {
       country,
       limit,
       offset,
+      timestamp,
     } = this.state;
     const { playlistData } = this.props;
     const listMap = playlistDataFilter && playlistDataFilter.length > 0 ? playlistDataFilter : playlistData;
@@ -117,6 +118,17 @@ class Playlists extends Component {
                       </MenuItem>
                     ))}
                   </TextField>
+
+                  <TextField
+                    label={objFilter[2].name}
+                    name="timestamp"
+                    value={timestamp}
+                    onChange={e => this.handleChange(e)}
+                    type="date"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
 
                   <TextField
                     label={objFilter[3].name}
