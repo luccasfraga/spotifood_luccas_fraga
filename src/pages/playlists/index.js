@@ -21,9 +21,15 @@ class Playlists extends Component {
     timestamp: '',
   };
 
-  componentDidMount() {
-    this.props.playlistActions.getPlaylistDataRequest(apiInterceptor);
+  componentWillMount() {
     this.getMockyFilter();
+    this.props.playlistActions.getPlaylistDataRequest(apiInterceptor);
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.props.playlistActions.getPlaylistDataRequest(apiInterceptor);
+    }, 30000);
   }
 
   componentWillReceiveProps(nextProps) {
