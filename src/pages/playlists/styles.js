@@ -18,6 +18,21 @@ export const List = styled.ul`
   padding: 0;
 `;
 
+export const BoxFilter = styled.div`
+  display: flex;
+  width: 100%;
+  background-color: #fff;
+  padding: 30px;
+  margin: 0 59px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  > div {
+    width: 30%;
+    margin-bottom: 15px;
+  }
+`;
+
 export const ItemList = styled.li`
   display: flex;
   flex-basis: 100%;
