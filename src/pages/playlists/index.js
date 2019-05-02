@@ -85,7 +85,6 @@ class Playlists extends Component {
     // eslint-disable-next-line max-len
     const listMap = playlistDataFilter && playlistDataFilter.length > 0 ? playlistDataFilter : playlistData;
 
-    console.log('euu', playlistData);
     return (
       <Container>
         <h1>Playlist</h1>
