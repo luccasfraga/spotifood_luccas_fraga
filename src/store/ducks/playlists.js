@@ -1,7 +1,7 @@
 import { createActions, createReducer } from 'reduxsauce';
 
 export const { Types, Creators } = createActions({
-  getPlaylistDataRequest: ['apiInterceptor', 'params'],
+  getPlaylistDataRequest: ['apiInterceptor', 'objFilter'],
   getPlaylistDataSuccess: ['data'],
 });
 

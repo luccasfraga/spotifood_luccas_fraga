@@ -22,10 +22,10 @@ class Playlists extends Component {
 
   componentDidMount() {
     this.props.playlistActions.getPlaylistDataRequest(apiInterceptor);
-    this.getMockFilter();
+    this.getMockyFilter();
   }
 
-  getMockFilter = async () => {
+  getMockyFilter = async () => {
     try {
       const response = await apiInterceptor({
         baseURL: process.env.REACT_APP_API_MOCKY,
@@ -33,12 +33,22 @@ class Playlists extends Component {
       });
       this.setState({ objFilter: response.data.filters });
     } catch (err) {
-      console.log(err);
+      // console.log('erro ao trazer os dados mocky', err);
     }
   };
 
   handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      const { locale, country, limit, offset, timestamp } = this.state;
+      const objFilter = {
+        locale,
+        country,
+        limit,
+        offset,
+        timestamp,
+      };
+      this.props.playlistActions.getPlaylistDataRequest(apiInterceptor, objFilter);
+    });
   };
 
   handleChangeParms = (e) => {
@@ -72,10 +82,10 @@ class Playlists extends Component {
       timestamp,
     } = this.state;
     const { playlistData } = this.props;
+    // eslint-disable-next-line max-len
     const listMap = playlistDataFilter && playlistDataFilter.length > 0 ? playlistDataFilter : playlistData;
 
-    console.log(objFilter);
-
+    console.log('euu', playlistData);
     return (
       <Container>
         <h1>Playlist</h1>
@@ -124,7 +134,7 @@ class Playlists extends Component {
                     name="timestamp"
                     value={timestamp}
                     onChange={e => this.handleChange(e)}
-                    type="date"
+                    type="datetime-local"
                     InputLabelProps={{
                       shrink: true,
                     }}
