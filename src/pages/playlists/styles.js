@@ -8,6 +8,29 @@ export const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   box-shadow: 0 0 13px 0 rgba(153, 153, 153, 0.1);
+
+  h1 {
+    font-size: 30px;
+    line-height: 30px;
+    margin-bottom: 30px;
+    color: #fff;
+
+    @media (min-width: ${metrics.screenSm}) {
+      font-size: 118px;
+      line-height: 110px;
+    }
+
+    span {
+      color: #c5f1d5;
+      font-size: 27px;
+      line-height: 29px;
+
+      @media (min-width: ${metrics.screenSm}) {
+        font-size: 110px;
+        line-height: 107px;
+      }
+    }
+  }
 `;
 
 export const List = styled.ul`
@@ -26,10 +49,15 @@ export const BoxFilter = styled.div`
   margin: 0 59px;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-bottom: 15px;
 
   > div {
-    width: 30%;
+    width: 100%;
     margin-bottom: 15px;
+
+    @media (min-width: ${metrics.screenSm}) {
+      width: 30%;
+    }
   }
 `;
 
@@ -40,16 +68,13 @@ export const ItemList = styled.li`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
-  margin: 10px;
+  margin: 0 0 10px;
   cursor: pointer;
   position: relative;
 
   @media (min-width: ${metrics.screenSm}) {
-    flex-basis: 31.1%;
-  }
-
-  @media (min-width: ${metrics.screenMd}) {
-    flex-basis: 18.3%;
+    margin: 0;
+    flex-basis: 20%;
   }
 
   > a {

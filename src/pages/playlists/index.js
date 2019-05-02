@@ -28,7 +28,15 @@ class Playlists extends Component {
 
   componentDidMount() {
     setInterval(() => {
-      this.props.playlistActions.getPlaylistDataRequest(apiInterceptor);
+      const { locale, country, limit, offset, timestamp } = this.state;
+      const objFilter = {
+        locale,
+        country,
+        limit,
+        offset,
+        timestamp,
+      };
+      this.props.playlistActions.getPlaylistDataRequest(apiInterceptor, objFilter);
     }, 30000);
   }
 
@@ -106,7 +114,9 @@ class Playlists extends Component {
 
     return (
       <Container>
-        <h1>Playlist</h1>
+        <h1>
+          Spotifood - <span>Playlist</span>
+        </h1>
         {playlistData && (
           <Fragment>
             <BoxFilter>
