@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken, logout } from './auth';
+import { getToken } from './auth';
 
 const axiosInstance = axios.create({ baseURL: process.env.REACT_APP_API });
 
@@ -26,10 +26,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response) {
-      logout();
-    }
-
     let msgError = {
       status: '',
       msg: '',

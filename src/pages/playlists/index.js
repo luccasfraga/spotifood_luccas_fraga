@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,6 +26,12 @@ class Playlists extends Component {
     this.getMockyFilter();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.playlistData !== this.state.playlistData) {
+      this.setState({ playlistDataFilter: nextProps.playlistData });
+    }
+  }
+
   getMockyFilter = async () => {
     try {
       const response = await apiInterceptor({
@@ -38,32 +45,39 @@ class Playlists extends Component {
   };
 
   handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value }, () => {
-      const { locale, country, limit, offset, timestamp } = this.state;
-      const objFilter = {
-        locale,
-        country,
-        limit,
-        offset,
-        timestamp,
-      };
-      this.props.playlistActions.getPlaylistDataRequest(apiInterceptor, objFilter);
-    });
+    this.setState(
+      {
+        searchTerm: '',
+        [e.target.name]:
+          e.target.name === 'timestamp'
+            ? moment(e.target.value).format('YYYY-MM-DDThh:mm:ss')
+            : e.target.value,
+      },
+      () => {
+        const { locale, country, limit, offset, timestamp } = this.state;
+        const objFilter = {
+          locale,
+          country,
+          limit,
+          offset,
+          timestamp,
+        };
+        this.props.playlistActions.getPlaylistDataRequest(apiInterceptor, objFilter);
+      },
+    );
   };
 
   handleChangeParms = (e) => {
     this.handleChange(e);
   };
 
-  filterByText = (e, playlistData) => {
-    this.handleChange(e);
-
-    this.setState({ playlistDataFilter: playlistData }, () => {
-      const { searchTerm, playlistDataFilter } = this.state;
+  filterByText = (e) => {
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      const { searchTerm } = this.state;
       if (searchTerm === '') {
-        return false;
+        return this.setState({ playlistDataFilter: this.props.playlistData });
       }
-      const filterlist = playlistDataFilter.filter((playlist) => {
+      const filterlist = this.props.playlistData.filter((playlist) => {
         return playlist.name.toLowerCase().includes(searchTerm.toLowerCase());
       });
       return this.setState({ playlistDataFilter: filterlist });
@@ -83,7 +97,6 @@ class Playlists extends Component {
     } = this.state;
     const { playlistData } = this.props;
     // eslint-disable-next-line max-len
-    const listMap = playlistDataFilter && playlistDataFilter.length > 0 ? playlistDataFilter : playlistData;
 
     return (
       <Container>
@@ -95,7 +108,7 @@ class Playlists extends Component {
                 label="Search playlist"
                 name="searchTerm"
                 value={searchTerm}
-                onChange={e => this.filterByText(e, playlistData)}
+                onChange={e => this.filterByText(e)}
               />
 
               {objFilter && (
@@ -161,27 +174,32 @@ class Playlists extends Component {
               )}
             </BoxFilter>
             <List>
-              {listMap.map((playlist) => {
-                return (
-                  <ItemList
-                    key={playlist.id}
-                    style={{ backgroundImage: `url(${playlist.images[0].url})` }}
-                  >
-                    <a
-                      href={playlist.external_urls.spotify}
-                      target="_blank"
-                      rel="noopener noreferrer"
+              {playlistDataFilter
+                && playlistDataFilter.map((playlist) => {
+                  return (
+                    <ItemList
+                      key={playlist.id}
+                      style={{ backgroundImage: `url(${playlist.images[0].url})` }}
                     >
-                      <div>
-                        <span>
-                          {playlist.name}
-                          <em>{playlist.owner.display_name}</em>
-                        </span>
-                      </div>
-                    </a>
-                  </ItemList>
-                );
-              })}
+                      <a
+                        href={playlist.external_urls.spotify}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <div>
+                          <span>
+                            {playlist.name}
+                            <em>{playlist.owner.display_name}</em>
+                          </span>
+                        </div>
+                      </a>
+                    </ItemList>
+                  );
+                })}
+
+              {!playlistDataFilter.length && (
+                <p>There are no playlists for these filters, please change them and try again</p>
+              )}
             </List>
           </Fragment>
         )}
